@@ -4,16 +4,6 @@
 *.suo
 *.userosscache
 *.sln.docstates
-# === Build Outputs (C++) ===
-# This ignores the folders where the .exe and .lib files are built
-[Dd]ebug/
-[Rr]elease/
-x64/
-x86/
-[Aa]rm/
-[Aa]rm64/
-build/
-frontend.tlog/
 # Ignore specific binary extensions
 *.exe
 *.pdb
@@ -39,3 +29,22 @@ _qmake.stash
 *.log
 *.tmp
 *.bak
+
+# Ignore debug and log files/folders
+# Debug/release output folders at any level
+**/[Dd]ebug*/
+**/[Rr]elease*/
+bin/
+obj/
+# Common log files and folders
+*.log
+*.log.*
+logs/
+log/
+# Crash dumps and traces
+*.dmp
+*.trace
+*.out
+*.err
+
+
