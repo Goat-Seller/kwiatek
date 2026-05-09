@@ -1,1 +1,5 @@
-﻿
+﻿   Qt/MSBuild: 3.5.0.0
+   Qt: 6.11.0
+  main.cpp
+  qrc_qml.cpp
+  frontend.vcxproj -> C:\studia\semestr-6\POiO\kwaitek\x64\Debug\frontend.exe
