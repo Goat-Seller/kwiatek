@@ -1,0 +1,12 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="backend/backend.vcxproj" />
+  <Project Path="frontend/frontend.vcxproj" />
+  <Project Path="kwaitek.vcxproj">
+    <BuildDependency Project="backend/backend.vcxproj" />
+    <BuildDependency Project="frontend/frontend.vcxproj" />
+  </Project>
+</Solution>
