@@ -1,1 +1,41 @@
+# === Visual Studio Files ===
 .vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+# === Build Outputs (C++) ===
+# This ignores the folders where the .exe and .lib files are built
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+build/
+frontend.tlog/
+# Ignore specific binary extensions
+*.exe
+*.pdb
+*.obj
+*.lib
+*.dll
+*.ilk
+*.exp
+
+# === Qt / QML Specific ===
+# Compiled QML files
+*.qmlc
+*.jsc
+
+# Qt Creator / Visual Studio Qt Tools metadata
+*.vshost.exe
+*.vshost.exe.config
+*.vshost.exe.manifest
+_qmake.stash
+.qmake.cache
+
+# === Logs and Temps ===
+*.log
+*.tmp
+*.bak
