@@ -1,5 +1,3 @@
 ﻿   Qt/MSBuild: 3.5.0.0
-   Qt: 6.11.0
-  main.cpp
-  qrc_qml.cpp
-  frontend.vcxproj -> C:\studia\semestr-6\POiO\kwaitek\x64\Debug\frontend.exe
+C:\Users\admin\AppData\Local\QtMsBuild\qt_vars.targets(135,5): error : There's no Qt version assigned to project frontend.vcxproj for configuration Debug/x64.
+C:\Users\admin\AppData\Local\QtMsBuild\qt_vars.targets(135,5): error : Please set a Qt installation in 'Project|Properties|Configuration Properties|Qt Project Settings|Qt Installation'.
