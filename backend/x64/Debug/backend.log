@@ -1,7 +1,4 @@
-﻿  Main.cpp
-  TDoniczka.cpp
+﻿  TDoniczka.cpp
   TGatunek.cpp
   Generowanie kodu...
-C:\Users\admin\Kwiatuszek\backend\Main.cpp(16,1): error C1010: Nieoczekiwany koniec pliku podczas wyszukiwania prekompilowanego pliku nagłówkowego. Czy zapomniano dodać „#include "pch.h"” do źródła?
-C:\Users\admin\Kwiatuszek\backend\TDoniczka.cpp(83,1): error C1010: Nieoczekiwany koniec pliku podczas wyszukiwania prekompilowanego pliku nagłówkowego. Czy zapomniano dodać „#include "pch.h"” do źródła?
-C:\Users\admin\Kwiatuszek\backend\TGatunek.cpp(36,1): error C1010: Nieoczekiwany koniec pliku podczas wyszukiwania prekompilowanego pliku nagłówkowego. Czy zapomniano dodać „#include "pch.h"” do źródła?
+  backend.vcxproj -> C:\Users\admin\Kwiatuszek\x64\Debug\backend.lib
