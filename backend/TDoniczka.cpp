@@ -5,12 +5,12 @@
 
 using namespace std;
 
-TDoniczka::TDoniczka(std::string nazwaDoniczki, std::string nazwaGatunku) // Inicjalizacja nazwy doniczki i obiektu rośliny na podstawie nazwy gatunku
-    : nazwaDoniczki(nazwaDoniczki),
-	roslinka(TGatunek::znajdzPoNazwie(nazwaGatunku))// Inicjalizacja obiektu rośliny na podstawie nazwy gatunku
-{
-    aktualizujWilgotnosc(); // przpisanie wilgotnosci
-    aktualizujTemperatura(); // przypisanie temperatury
+TDoniczka::TDoniczka(std::string nDoniczki, std::string nGatunku, double minWilg, double temp)
+    : nazwaDoniczki(nDoniczki), roslinka(nGatunku, minWilg, temp) {
+
+    // Ustawiamy startowe wartosci czujnikow na te wymagane przez rosline
+    aktualnaWilgotnosc = minWilg;
+    aktualnaTemperatura = temp;
 }
 
 // Metoda do aktualizacji wilgotności - symulacja odczytu z czujnika

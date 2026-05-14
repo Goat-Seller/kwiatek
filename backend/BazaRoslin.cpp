@@ -2,7 +2,7 @@
 #include "BazaRoslin.h"
 #include "json.hpp"
 #include <fstream>
-#include <ctime>   // <--- DODANA BIBLIOTEKA DO CZASU
+#include <ctime>   
 
 using json = nlohmann::json;
 
@@ -28,7 +28,6 @@ bool BazaRoslin::wczytajZPliku() {
         nowa.wilgotnosc_min = r["wilgotnosc_min"];
         nowa.tolerancja = r["tolerancja"];
         nowa.czas_podlewania_s = r["czas_podlewania_s"];
-        // Używamy .value() żeby program nie wywalił błędu, jeśli roślina jeszcze nie ma tego pola w JSON
         nowa.ostatnie_podlanie = r.value("ostatnie_podlanie", "Brak danych");
 
         lista_roslin.push_back(nowa);
@@ -47,7 +46,7 @@ bool BazaRoslin::zapiszDoPliku() {
         temp["wilgotnosc_min"] = r.wilgotnosc_min;
         temp["tolerancja"] = r.tolerancja;
         temp["czas_podlewania_s"] = r.czas_podlewania_s;
-        temp["ostatnie_podlanie"] = r.ostatnie_podlanie; // <--- ZAPISUJEMY NOWE POLE
+        temp["ostatnie_podlanie"] = r.ostatnie_podlanie;
 
         j["rosliny"].push_back(temp);
     }
@@ -73,32 +72,48 @@ void BazaRoslin::sprawdzRosline(const std::string& id) {
             std::cout << "Informacje o: " << r.nazwa << std::endl;
             std::cout << "  Min. wilgotnosc: " << r.wilgotnosc_min << "% (tolerancja +-" << r.tolerancja << "%)" << std::endl;
             std::cout << "  Czas pracy pompy: " << r.czas_podlewania_s << " s" << std::endl;
-            std::cout << "  OSTATNIE PODLANIE: " << r.ostatnie_podlanie << std::endl; // <--- WYŚWIETLAMY KIEDY
+            std::cout << "  OSTATNIE PODLANIE: " << r.ostatnie_podlanie << std::endl;
             return;
         }
     }
     std::cout << "Nie znaleziono rosliny o ID: " << id << std::endl;
 }
 
-void BazaRoslin::podlej(const std::string& id) {
-    // UWAGA: Zmieniliśmy na auto& (z referencją), żeby móc modyfikować roślinę na liście!
+void BazaRoslin::podlej(const std::string& id_lub_nazwa) {
     for (auto& r : lista_roslin) {
-        if (r.id == id) {
-            std::cout << ">>> URUCHAMIAM POMPKE DLA: " << r.nazwa << " <<<" << std::endl;
+        // Sprawdzamy czy zgadza sie ID albo NAZWA!
+        if (r.id == id_lub_nazwa || r.nazwa == id_lub_nazwa) {
 
-            // Kod do pobrania aktualnego czasu komputera w Visual Studio
             auto t = std::time(nullptr);
             struct tm timeinfo;
             localtime_s(&timeinfo, &t);
             char buffer[20];
-            // Formatujemy czas do postaci RRRR-MM-DD GG:MM (np. 2026-05-13 20:30)
             strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M", &timeinfo);
 
-            r.ostatnie_podlanie = std::string(buffer); // <--- ZAPISUJEMY NOWY CZAS DO OBIEKTU
+            r.ostatnie_podlanie = std::string(buffer);
 
-            std::cout << "Zanotowano podlewanie z data: " << r.ostatnie_podlanie << std::endl;
+            std::cout << "-> Baza JSON: Zanotowano podlewanie (" << r.nazwa << ") z data: " << r.ostatnie_podlanie << std::endl;
             return;
         }
     }
-    std::cout << "Nie mozna podlac. Brak rosliny o ID: " << id << std::endl;
+    std::cout << "Baza JSON: Nie mozna zaktualizowac daty. Brak rosliny o ID/Nazwie: " << id_lub_nazwa << std::endl;
+}
+
+std::string BazaRoslin::sprawdzGatunek(const std::string& szukana_fraza) {
+    for (const auto& r : lista_roslin) {
+        if (r.id == szukana_fraza || r.nazwa == szukana_fraza) {
+            return r.nazwa; // Zwraca prawdziwą nazwę z bazy
+        }
+    }
+    return "BRAK"; // Zwraca flagę błędu, jeśli nie znajdzie
+}
+
+bool BazaRoslin::pobierzDaneRosliny(const std::string& szukana_fraza, Roslina& wynik) {
+    for (const auto& r : lista_roslin) {
+        if (r.id == szukana_fraza || r.nazwa == szukana_fraza) {
+            wynik = r; // Znaleziono, kopiujemy cala paczke danych
+            return true;
+        }
+    }
+    return false; // Nie znaleziono w JSON-ie
 }

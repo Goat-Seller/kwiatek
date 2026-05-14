@@ -14,7 +14,4 @@ public:
 	std::string pobierzNazwe() const; // Zwraca nazwę gatunku
 	double pobierzMinWilgotnosc() const; // Zwraca minimalną wilgotność wymaganą przez gatunek
 	double pobierzTemperature() const; // Zwraca docelową temperaturę wymaganą przez gatunek
-
-	static const std::vector<TGatunek>& BazaGatunkow();// Baza gatunków roślin (statyczna metoda)
-	static TGatunek znajdzPoNazwie(std::string nazwa); // Znajduje gatunek po nazwie w bazie
 };

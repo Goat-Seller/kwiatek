@@ -20,7 +20,7 @@
             "czas_podlewania_s": 5,
             "id": "basil_03",
             "nazwa": "Bazylia",
-            "ostatnie_podlanie": "Brak danych",
+            "ostatnie_podlanie": "2026-05-14 11:38",
             "tolerancja": 5,
             "wilgotnosc_min": 50
         },
@@ -28,7 +28,7 @@
             "czas_podlewania_s": 1,
             "id": "cactus_04",
             "nazwa": "Kaktus",
-            "ostatnie_podlanie": "Brak danych",
+            "ostatnie_podlanie": "2026-05-14 17:01",
             "tolerancja": 5,
             "wilgotnosc_min": 20
         },

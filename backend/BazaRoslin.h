@@ -22,11 +22,11 @@ private:
 public:
     // Konstruktor przyjmujący ścieżkę do pliku JSON
     BazaRoslin(std::string sciezka);
-
+    std::string sprawdzGatunek(const std::string& szukana_fraza);
     // Funkcje do odczytu i zapisu
     bool wczytajZPliku();
     bool zapiszDoPliku();
-
+    bool pobierzDaneRosliny(const std::string& szukana_fraza, Roslina& wynik);
     // Funkcje do obsługi z komend
     void wyswietlWszystkie();
     void sprawdzRosline(const std::string& id);
