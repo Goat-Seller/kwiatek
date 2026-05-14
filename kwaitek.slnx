@@ -3,14 +3,12 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="backend/backend.vcxproj" Id="6529e1e3-a500-45ee-8ba7-d61abe96f3f3">
-    <BuildDependency Project="frontend/frontend.vcxproj" />
-  </Project>
+  <Project Path="backend/backend.vcxproj" Id="6529e1e3-a500-45ee-8ba7-d61abe96f3f3" />
   <Project Path="frontend/frontend.vcxproj" Id="20d12e72-2d45-4567-9b2c-9b42b8f72b0f">
+    <BuildDependency Project="backend/backend.vcxproj" />
     <Platform Project="x64" />
   </Project>
   <Project Path="kwaitek.vcxproj" Id="865a77e8-8080-4630-bbdd-b447204a4330">
     <BuildDependency Project="backend/backend.vcxproj" />
-    <BuildDependency Project="frontend/frontend.vcxproj" />
   </Project>
 </Solution>

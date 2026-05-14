@@ -4,16 +4,6 @@
 *.suo
 *.userosscache
 *.sln.docstates
-# === Build Outputs (C++) ===
-# This ignores the folders where the .exe and .lib files are built
-[Dd]ebug/
-[Rr]elease/
-x64/
-x86/
-[Aa]rm/
-[Aa]rm64/
-build/
-frontend.tlog/
 # Ignore specific binary extensions
 *.exe
 *.pdb
@@ -48,3 +38,14 @@ _qmake.stash
 /backend/x64/Debug/backend.log
 /backend/x64/Debug/backend.tlog/Cl.items.tlog
 /frontend/x64/Debug/frontend.log
+/backend/x64/Debug/backend.tlog/backend.lastbuildstate
+/backend/x64/Debug/backend.tlog/CL.command.1.tlog
+/backend/x64/Debug/backend.tlog/CL.read.1.tlog
+/backend/x64/Debug/backend.tlog/CL.write.1.tlog
+/backend/x64/Debug/backend.tlog/Lib-link.read.1.tlog
+/backend/x64/Debug/backend.tlog/Lib-link.write.1.tlog
+/backend/x64/Debug/backend.tlog/Lib.command.1.tlog
+/frontend/x64/Debug/frontend.tlog/frontend.lastbuildstate
+/kwaitek/x64/Debug/kwaitek.tlog/kwaitek.lastbuildstate
+/kwaitek/x64/Debug/kwaitek.log
+/kwaitek/x64/Debug/kwaitek.exe.recipe
