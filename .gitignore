@@ -29,22 +29,27 @@ _qmake.stash
 *.log
 *.tmp
 *.bak
-
-# Ignore debug and log files/folders
-# Debug/release output folders at any level
-**/[Dd]ebug*/
-**/[Rr]elease*/
-bin/
-obj/
-# Common log files and folders
-*.log
-*.log.*
-logs/
-log/
-# Crash dumps and traces
-*.dmp
-*.trace
-*.out
-*.err
-
-
+/frontend/x64/Debug/frontend.tlog/frontend.write.1u.tlog
+/frontend/x64/Debug/frontend.tlog/CL.read.1.tlog
+/backend/x64/Debug/backend.tlog/
+/frontend/x64/Debug/frontend.tlog/CL.read.1.tlog
+/frontend/x64/Debug/frontend.tlog/CL.write.1.tlog
+/frontend/x64/Debug/frontend.tlog/CL.read.1.tlog
+/backend/x64/Debug/backend.log
+/backend/x64/Debug/backend.tlog/Cl.items.tlog
+/frontend/x64/Debug/frontend.log
+/backend/x64/Debug/backend.tlog/backend.lastbuildstate
+/backend/x64/Debug/backend.tlog/CL.command.1.tlog
+/backend/x64/Debug/backend.tlog/CL.read.1.tlog
+/backend/x64/Debug/backend.tlog/CL.write.1.tlog
+/backend/x64/Debug/backend.tlog/Lib-link.read.1.tlog
+/backend/x64/Debug/backend.tlog/Lib-link.write.1.tlog
+/backend/x64/Debug/backend.tlog/Lib.command.1.tlog
+/frontend/x64/Debug/frontend.tlog/frontend.lastbuildstate
+/kwaitek/x64/Debug/kwaitek.tlog/kwaitek.lastbuildstate
+/kwaitek/x64/Debug/kwaitek.log
+/kwaitek/x64/Debug/kwaitek.exe.recipe
+/backend/x64/Debug
+/frontend/x64/Debug/frontend.tlog
+/frontend/x64/Debug
+/kwaitek/x64/Debug

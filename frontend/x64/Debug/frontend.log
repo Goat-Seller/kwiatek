@@ -1,3 +1,0 @@
-﻿   Qt/MSBuild: 3.5.0.0
-C:\Users\admin\AppData\Local\QtMsBuild\qt_vars.targets(135,5): error : There's no Qt version assigned to project frontend.vcxproj for configuration Debug/x64.
-C:\Users\admin\AppData\Local\QtMsBuild\qt_vars.targets(135,5): error : Please set a Qt installation in 'Project|Properties|Configuration Properties|Qt Project Settings|Qt Installation'.
