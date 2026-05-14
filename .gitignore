@@ -49,3 +49,7 @@ _qmake.stash
 /kwaitek/x64/Debug/kwaitek.tlog/kwaitek.lastbuildstate
 /kwaitek/x64/Debug/kwaitek.log
 /kwaitek/x64/Debug/kwaitek.exe.recipe
+/backend/x64/Debug
+/frontend/x64/Debug/frontend.tlog
+/frontend/x64/Debug
+/kwaitek/x64/Debug
