@@ -40,3 +40,11 @@ _qmake.stash
 *.tmp
 *.bak
 /frontend/x64/Debug/frontend.tlog/frontend.write.1u.tlog
+/frontend/x64/Debug/frontend.tlog/CL.read.1.tlog
+/backend/x64/Debug/backend.tlog/
+/frontend/x64/Debug/frontend.tlog/CL.read.1.tlog
+/frontend/x64/Debug/frontend.tlog/CL.write.1.tlog
+/frontend/x64/Debug/frontend.tlog/CL.read.1.tlog
+/backend/x64/Debug/backend.log
+/backend/x64/Debug/backend.tlog/Cl.items.tlog
+/frontend/x64/Debug/frontend.log
