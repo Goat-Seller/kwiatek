@@ -39,3 +39,4 @@ _qmake.stash
 *.log
 *.tmp
 *.bak
+/frontend/x64/Debug/frontend.tlog/frontend.write.1u.tlog
