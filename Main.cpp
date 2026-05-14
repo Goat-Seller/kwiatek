@@ -2,21 +2,20 @@
 #include <iostream>
 #include <string>
 #include "TDoniczka.h"
+#include "TPomieszczenie.h"
 #include "BazaRoslin.h"
 
 using namespace std;
 
 int main() {
-    cout << "=== START SYSTEMU NAWADNIANIA ===" << endl << endl;
+    TDoniczka d1("Kaktus Marka", "Kaktus");
+    TDoniczka d2("Paproc Ani", "Paproc");
 
-    // 1. CZĘŚĆ KOLEGI: Inicjalizacja i test konkretnej doniczki
-    cout << "--- TEST DONICZKI ---" << endl;
-    TDoniczka doniczka1("Doniczka Marka", "Kaktus"); // W przyszłości pobierzecie to z JSON-a
-    doniczka1.StatusDoniczkiX();
-    doniczka1.Podlewanie();
-    doniczka1.ZmianaTemperatury();
-    cout << "---------------------" << endl << endl;
+    TPomieszczenie salon("Salon", 22.0);
 
+    salon.dodajDoniczkePoNazwie("Kaktus Marka");
+    salon.dodajDoniczkePoNazwie("Storczyk");
+    salon.statusPomieszczenia();
 
     // 2. TWOJA CZĘŚĆ: Ładowanie bazy danych
     BazaRoslin baza("baza.json");
