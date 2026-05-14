@@ -1,0 +1,87 @@
+{
+    "rosliny": [
+        {
+            "czas_podlewania_s": 2,
+            "id": "succulent_01",
+            "nazwa": "Echowieria (Sukulent)",
+            "ostatnie_podlanie": "Brak danych",
+            "tolerancja": 5,
+            "wilgotnosc_min": 25
+        },
+        {
+            "czas_podlewania_s": 8,
+            "id": "fern_02",
+            "nazwa": "Paproc (Nefrolepis)",
+            "ostatnie_podlanie": "2026-05-14 08:40",
+            "tolerancja": 10,
+            "wilgotnosc_min": 70
+        },
+        {
+            "czas_podlewania_s": 5,
+            "id": "basil_03",
+            "nazwa": "Bazylia",
+            "ostatnie_podlanie": "Brak danych",
+            "tolerancja": 5,
+            "wilgotnosc_min": 50
+        },
+        {
+            "czas_podlewania_s": 1,
+            "id": "cactus_04",
+            "nazwa": "Kaktus",
+            "ostatnie_podlanie": "Brak danych",
+            "tolerancja": 5,
+            "wilgotnosc_min": 20
+        },
+        {
+            "czas_podlewania_s": 6,
+            "id": "monstera_05",
+            "nazwa": "Monstera Dziurawa",
+            "ostatnie_podlanie": "Brak danych",
+            "tolerancja": 10,
+            "wilgotnosc_min": 60
+        },
+        {
+            "czas_podlewania_s": 3,
+            "id": "orchid_06",
+            "nazwa": "Storczyk",
+            "ostatnie_podlanie": "Brak danych",
+            "tolerancja": 5,
+            "wilgotnosc_min": 40
+        },
+        {
+            "czas_podlewania_s": 6,
+            "id": "mint_07",
+            "nazwa": "Mieta",
+            "ostatnie_podlanie": "Brak danych",
+            "tolerancja": 10,
+            "wilgotnosc_min": 65
+        },
+        {
+            "czas_podlewania_s": 3,
+            "id": "rosemary_08",
+            "nazwa": "Rozmaryn",
+            "ostatnie_podlanie": "Brak danych",
+            "tolerancja": 5,
+            "wilgotnosc_min": 30
+        },
+        {
+            "czas_podlewania_s": 5,
+            "id": "peacelily_09",
+            "nazwa": "Skrzydlokwiat",
+            "ostatnie_podlanie": "Brak danych",
+            "tolerancja": 10,
+            "wilgotnosc_min": 55
+        },
+        {
+            "czas_podlewania_s": 4,
+            "id": "ficus_10",
+            "nazwa": "Fikus Benjamina",
+            "ostatnie_podlanie": "Brak danych",
+            "tolerancja": 5,
+            "wilgotnosc_min": 45
+        }
+    ],
+    "system_info": {
+        "ostatnia_aktualizacja": "2026-05-13"
+    }
+}

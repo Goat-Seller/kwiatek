@@ -27,6 +27,12 @@
     <ClInclude Include="TDoniczka.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BazaRoslin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -36,6 +42,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TDoniczka.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BazaRoslin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
