@@ -1,66 +1,35 @@
-#include "pch.h" // Pamiętaj o tym, jeśli dalej macie prekompilowane nagłówki!
-#include <iostream>
-#include <string>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
+
+// Include your backend and wrapper
 #include "TDoniczka.h"
-#include "BazaRoslin.h"
+#include "DoniczkaWrapper.h"
 
-using namespace std;
+int main(int argc, char* argv[])
+{
+#if defined(Q_OS_WIN) && QT_VERSION_CHECK(5, 6, 0) <= QT_VERSION && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
+    qputenv("QT_QUICK_CONTROLS_STYLE", "Fusion");
 
-int main() {
-    cout << "=== START SYSTEMU NAWADNIANIA ===" << endl << endl;
-
-    // 1. CZĘŚĆ KOLEGI: Inicjalizacja i test konkretnej doniczki
-    cout << "--- TEST DONICZKI ---" << endl;
-    TDoniczka doniczka1("Doniczka Marka", "Kaktus"); // W przyszłości pobierzecie to z JSON-a
-    doniczka1.StatusDoniczkiX();
-    doniczka1.Podlewanie();
-    doniczka1.ZmianaTemperatury();
-    cout << "---------------------" << endl << endl;
+    QGuiApplication app(argc, argv);
 
 
-    // 2. TWOJA CZĘŚĆ: Ładowanie bazy danych
-    BazaRoslin baza("baza.json");
-    if (!baza.wczytajZPliku()) {
-        cout << "Blad wczytywania bazy. Upewnij sie, ze plik baza.json lezy w folderze z projektem!" << endl;
-    }
-    else {
-        cout << "Wczytano baze roslin (JSON) pomyslnie!" << endl;
-    }
+    // 1. Create pure C++ backend object
+    TDoniczka backendDoniczka("Doniczka 1", "Fikus");
 
+    // 2. Create the Qt Wrapper around the backend object
+    DoniczkaWrapper uiDoniczka(&backendDoniczka);
 
-    // 3. TWOJA CZĘŚĆ: Pętla komend wpisywanych przez użytkownika
-    cout << "\n--- PANEL STEROWANIA ---" << endl;
-    cout << "Dostepne komendy: lista, info <id>, podlej <id>, wyjscie\n";
+    QQmlApplicationEngine engine;
 
-    string komenda;
-    string argument;
+    // 3. Expose the WRAPPER to QML, not the backend directly
+    engine.rootContext()->setContextProperty("DoniczkaController", &uiDoniczka);
 
-    while (true) {
-        cout << "\nWpisz komende: ";
-        cin >> komenda;
+    engine.load(QUrl(QStringLiteral("qrc:/qt/qml/frontend/main.qml")));
+    if (engine.rootObjects().isEmpty())
+        return -1;
 
-        if (komenda == "lista") {
-            baza.wyswietlWszystkie();
-        }
-        else if (komenda == "info") {
-            cin >> argument;
-            baza.sprawdzRosline(argument);
-        }
-        else if (komenda == "podlej") {
-            cin >> argument;
-            baza.podlej(argument);
-        }
-        else if (komenda == "wyjscie") {
-            baza.zapiszDoPliku();
-            cout << "Zamykanie programu..." << endl;
-            break;
-        }
-        else {
-            cout << "Nieznana komenda. Dostepne to: lista, info, podlej, wyjscie." << endl;
-            cin.clear();
-            cin.ignore(10000, '\n'); // Czyszczenie śmieci z bufora
-        }
-    }
-
-    return 0;
+    return app.exec();
 }

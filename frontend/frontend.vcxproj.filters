@@ -29,9 +29,10 @@
     <QtRcc Include="qml.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="main.qml">
       <Filter>Source Files</Filter>
     </None>
-
   </ItemGroup>
 </Project>

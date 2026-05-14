@@ -1,5 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext> 
+#include "TDoniczka.h" 
 
 int main(int argc, char *argv[])
 {
@@ -8,6 +10,12 @@ int main(int argc, char *argv[])
 #endif
 
     QGuiApplication app(argc, argv);
+
+    TDoniczka mojaDoniczka("Fikus 1", "Fikus Benjamina");
+
+    QQmlApplicationEngine engine;
+
+    engine.rootContext()->setContextProperty("DoniczkaController", &mojaDoniczka);
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qt/qml/frontend/main.qml")));

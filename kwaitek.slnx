@@ -10,5 +10,6 @@
   </Project>
   <Project Path="kwaitek.vcxproj" Id="865a77e8-8080-4630-bbdd-b447204a4330">
     <BuildDependency Project="backend/backend.vcxproj" />
+    <BuildDependency Project="frontend/frontend.vcxproj" />
   </Project>
 </Solution>

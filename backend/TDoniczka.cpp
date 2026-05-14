@@ -13,7 +13,7 @@ TDoniczka::TDoniczka(std::string nazwaDoniczki, std::string nazwaGatunku) // Ini
     aktualizujTemperatura(); // przypisanie temperatury
 }
 
-// Metoda do aktualizacji wilgotności - symulacja odczytu z czujnika
+
 void TDoniczka::aktualizujWilgotnosc() {
     random_device rd;
     mt19937 gen(rd());
@@ -80,4 +80,4 @@ void TDoniczka::ZmianaTemperatury() {
     else {
         cout << "-> Temperatura jest idealna (" << aktualnaTemperatura << " st. C). Brak zmian.\n";
     }
-}
+}   
