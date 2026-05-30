@@ -5,22 +5,19 @@
 
 class TDoniczka {
 private:
-	std::string nazwaDoniczki;
-	TGatunek roslinka;
-	double aktualnaWilgotnosc;
+    std::string nazwaDoniczki;
+    const TGatunek* roslinka;
+    double aktualnaWilgotnosc;
 
-	static std::vector<TDoniczka*> rejestrDoniczek;
-
+    static std::vector<TDoniczka*> rejestrDoniczek;
 public:
-	TDoniczka(std::string nazwaDoniczki, std::string nazwaGatunku);
+    TDoniczka(std::string nazwaDoniczki, const TGatunek* wzorzecGatunku);
 
-	void aktualizujWilgotnosc();
+    void aktualizujWilgotnosc();
+    void StatusDoniczkiX(double tempOtoczenia) const;
+    void Podlewanie();
+    void ZmianaTemperatury(double tempOtoczenia);
 
-	void StatusDoniczkiX(double tempOtoczenia) const;
-	void Podlewanie();
-	void ZmianaTemperatury(double tempOtoczenia);
-
-	std::string pobierzNazweDoniczki() const { return nazwaDoniczki; }
-
-	static TDoniczka* znajdzDoniczke(std::string nazwa);
+    std::string pobierzNazweDoniczki() const { return nazwaDoniczki; }
+    static TDoniczka* znajdzDoniczke(std::string nazwa);
 };

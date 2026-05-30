@@ -3,57 +3,53 @@
 #include <random>
 #include "TDoniczka.h"
 
-using namespace std;
+std::vector<TDoniczka*> TDoniczka::rejestrDoniczek;
 
-// Inicjalizacja statycznego rejestru
-vector<TDoniczka*> TDoniczka::rejestrDoniczek;
-
-TDoniczka::TDoniczka(string nazwaDoniczki, string nazwaGatunku)
-    : nazwaDoniczki(nazwaDoniczki),
-    roslinka(TGatunek::znajdzPoNazwie(nazwaGatunku))
+TDoniczka::TDoniczka(std::string nazwaDoniczki, const TGatunek* wzorzecGatunku)
+    : nazwaDoniczki(nazwaDoniczki), roslinka(wzorzecGatunku)
 {
     aktualizujWilgotnosc();
-    // Każda nowa doniczka dopisuje się do globalnej listy
     rejestrDoniczek.push_back(this);
 }
 
 void TDoniczka::aktualizujWilgotnosc() {
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_real_distribution<double> rozkladWilgotnosc(10.0, 90.0);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> rozkladWilgotnosc(10.0, 90.0);
     aktualnaWilgotnosc = rozkladWilgotnosc(gen);
 }
 
-// Funkcja wyszukująca doniczkę po nazwie w rejestrze
-TDoniczka* TDoniczka::znajdzDoniczke(string nazwa) {
-    for (auto d : rejestrDoniczek) {
-        if (d->nazwaDoniczki == nazwa) return d;
-    }
-    return nullptr; // Nie znaleziono
-}
-
 void TDoniczka::StatusDoniczkiX(double tempOtoczenia) const {
-    cout << "\n=== STATUS DONICZKI: " << nazwaDoniczki << " ===" << endl;
-    cout << "Zasadzona roslina:    " << roslinka.pobierzNazwe() << endl;
-    cout << "Aktualna wilgotnosc:  " << aktualnaWilgotnosc << " %" << endl;
-    // Pobiera temperaturę przekazaną przez pomieszczenie
-    cout << "Temperatura otoczenia: " << tempOtoczenia << " st. C (Optymalna: " << roslinka.pobierzTemperature() << " st. C)" << endl;
-    cout << "====================================\n";
+    if (!roslinka) return; // Zabezpieczenie przed brakiem danych
+    std::cout << "\n=== STATUS DONICZKI: " << nazwaDoniczki << " ===" << std::endl;
+    std::cout << "Zasadzona roslina:    " << roslinka->pobierzNazwe() << std::endl;
+    std::cout << "Aktualna wilgotnosc:  " << aktualnaWilgotnosc << " %" << std::endl;
+    std::cout << "Temperatura otoczenia: " << tempOtoczenia << " st. C (Optymalna: " << roslinka->pobierzTemperature() << " st. C)" << std::endl;
+    std::cout << "====================================\n";
 }
 
 void TDoniczka::Podlewanie() {
-    double optymalna = roslinka.pobierzMinWilgotnosc();
+    if (!roslinka) return;
+    double optymalna = roslinka->pobierzMinWilgotnosc();
     if (aktualnaWilgotnosc < optymalna) {
-        cout << "-> [" << nazwaDoniczki << "] Podlewanie..." << endl;
+        std::cout << "-> [" << nazwaDoniczki << "] Podlewanie..." << std::endl;
         aktualnaWilgotnosc = optymalna;
     }
 }
 
 void TDoniczka::ZmianaTemperatury(double tempOtoczenia) {
-    double optymalna = roslinka.pobierzTemperature();
-    cout << "-> [" << nazwaDoniczki << "] Weryfikacja klimatu (Temp otoczenia: " << tempOtoczenia << " st. C)..." << endl;
+    if (!roslinka) return; // To jest kluczowe zabezpieczenie!
 
-    if (tempOtoczenia < optymalna) cout << "   UWAGA: Roslinie jest za zimno w tym pokoju!" << endl;
-    else if (tempOtoczenia > optymalna) cout << "   UWAGA: Roslinie jest za cieplo w tym pokoju!" << endl;
-    else cout << "   Klimat idealny." << endl;
+    double optymalna = roslinka->pobierzTemperature(); // Używamy -> bo roslinka to wskaźnik
+    std::cout << "-> [" << nazwaDoniczki << "] Weryfikacja klimatu (Temp otoczenia: " << tempOtoczenia << " st. C)..." << std::endl;
+
+    if (tempOtoczenia < optymalna) {
+        std::cout << "   UWAGA: Roslinie jest za zimno w tym pokoju!" << std::endl;
+    }
+    else if (tempOtoczenia > optymalna) {
+        std::cout << "   UWAGA: Roslinie jest za cieplo w tym pokoju!" << std::endl;
+    }
+    else {
+        std::cout << "   Klimat idealny." << std::endl;
+    }
 }
