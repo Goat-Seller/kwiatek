@@ -6,9 +6,7 @@
 
 using json = nlohmann::json;
 
-BazaRoslin::BazaRoslin(std::string sciezka) {
-    sciezka_do_pliku = sciezka;
-}
+BazaRoslin::BazaRoslin(std::string sciezka) : sciezka_do_pliku(sciezka) {}
 
 bool BazaRoslin::wczytajZPliku() {
     std::ifstream plik(sciezka_do_pliku);
@@ -20,20 +18,31 @@ bool BazaRoslin::wczytajZPliku() {
 
     ostatnia_aktualizacja = j["system_info"]["ostatnia_aktualizacja"];
     lista_roslin.clear();
+    bazaGatunkow.clear(); // Czyścimy bazę gatunków przed nowym wczytaniem
 
     for (const auto& r : j["rosliny"]) {
+        // 1. Wczytujemy roślinę
         Roslina nowa;
         nowa.id = r["id"];
         nowa.nazwa = r["nazwa"];
         nowa.wilgotnosc_min = r["wilgotnosc_min"];
         nowa.tolerancja = r["tolerancja"];
         nowa.czas_podlewania_s = r["czas_podlewania_s"];
-        // Używamy .value() żeby program nie wywalił błędu, jeśli roślina jeszcze nie ma tego pola w JSON
         nowa.ostatnie_podlanie = r.value("ostatnie_podlanie", "Brak danych");
-
         lista_roslin.push_back(nowa);
+
+        // 2. Tworzymy wzorzec gatunku (jeśli go jeszcze nie ma w pamięci)
+        // Zakładamy, że temp. domyślna to 22.0, bo nie ma jej w obecnym JSON
+        bazaGatunkow.emplace_back(nowa.nazwa, (double)nowa.wilgotnosc_min, 22.0);
     }
     return true;
+}
+
+const TGatunek* BazaRoslin::pobierzGatunek(const std::string& nazwa) const {
+    for (const auto& g : bazaGatunkow) {
+        if (g.pobierzNazwe() == nazwa) return &g;
+    }
+    return nullptr;
 }
 
 bool BazaRoslin::zapiszDoPliku() {

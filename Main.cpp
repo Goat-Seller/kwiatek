@@ -8,14 +8,6 @@
 using namespace std;
 
 int main() {
-    TDoniczka d1("Kaktus Marka", "Kaktus");
-    TDoniczka d2("Paproc Ani", "Paproc");
-
-    TPomieszczenie salon("Salon", 22.0);
-
-    salon.dodajDoniczkePoNazwie("Kaktus Marka");
-    salon.dodajDoniczkePoNazwie("Storczyk");
-    salon.statusPomieszczenia();
 
     // 2. TWOJA CZĘŚĆ: Ładowanie bazy danych
     BazaRoslin baza("baza.json");

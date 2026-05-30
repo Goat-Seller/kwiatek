@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "TGatunek.h"
 
 // Struktura przechowująca dane pojedynczej rośliny
 struct Roslina {
@@ -17,6 +18,7 @@ class BazaRoslin {
 private:
     std::vector<Roslina> lista_roslin;
     std::string sciezka_do_pliku;
+    std::vector<TGatunek> bazaGatunkow;
     std::string ostatnia_aktualizacja;
 
 public:
@@ -31,4 +33,6 @@ public:
     void wyswietlWszystkie();
     void sprawdzRosline(const std::string& id);
     void podlej(const std::string& id);
+
+    const TGatunek* pobierzGatunek(const std::string& nazwa) const;
 };
