@@ -8,6 +8,7 @@ using json = nlohmann::json;
 
 BazaRoslin::BazaRoslin(std::string sciezka) : sciezka_do_pliku(sciezka) {}
 
+// --- NOWY ODCZYT JSON (Zadanie 1) ---
 bool BazaRoslin::wczytajZPliku() {
     std::ifstream plik(sciezka_do_pliku);
     if (!plik.is_open()) return false;
@@ -16,49 +17,82 @@ bool BazaRoslin::wczytajZPliku() {
     plik >> j;
     plik.close();
 
-    ostatnia_aktualizacja = j["system_info"]["ostatnia_aktualizacja"];
-    lista_roslin.clear();
-    bazaGatunkow.clear(); // Czyścimy bazę gatunków przed nowym wczytaniem
+    // Zabezpieczenie przed brakiem pola
+    ostatnia_aktualizacja = j.contains("system_info") ? j["system_info"].value("ostatnia_aktualizacja", "Brak") : "Brak danych";
 
-    for (const auto& r : j["rosliny"]) {
-        // 1. Wczytujemy roślinę
-        Roslina nowa;
-        nowa.id = r["id"];
-        nowa.nazwa = r["nazwa"];
-        nowa.wilgotnosc_min = r["wilgotnosc_min"];
-        nowa.tolerancja = r["tolerancja"];
-        nowa.czas_podlewania_s = r["czas_podlewania_s"];
-        nowa.ostatnie_podlanie = r.value("ostatnie_podlanie", "Brak danych");
-        lista_roslin.push_back(nowa);
+    bazaGatunkow.clear();
+    listaDoniczek.clear();
+    listaPomieszczen.clear();
 
-        // 2. Tworzymy wzorzec gatunku (jeśli go jeszcze nie ma w pamięci)
-        // Zakładamy, że temp. domyślna to 22.0, bo nie ma jej w obecnym JSON
-        bazaGatunkow.emplace_back(nowa.nazwa, (double)nowa.wilgotnosc_min, 22.0);
+    // 1. Wczytujemy Gatunki
+    if (j.contains("gatunki")) {
+        for (const auto& g : j["gatunki"]) {
+            bazaGatunkow.emplace_back(g["nazwa"], g["min_wilgotnosc"], g["temp_docelowa"]);
+        }
+    }
+
+    // 2. Wczytujemy Doniczki
+    if (j.contains("doniczki")) {
+        for (const auto& d : j["doniczki"]) {
+            std::string nazwaGatunku = d["gatunek"];
+            const TGatunek* wskaznikNaGatunek = pobierzGatunek(nazwaGatunku);
+
+            TDoniczka nowaDoniczka(d["nazwa_doniczki"], wskaznikNaGatunek);
+            nowaDoniczka.ustawOstatniePodlanie(d.value("ostatnie_podlanie", "Brak danych"));
+            listaDoniczek.push_back(nowaDoniczka);
+        }
+    }
+
+    // 3. Wczytujemy Pomieszczenia
+    if (j.contains("pomieszczenia")) {
+        for (const auto& p : j["pomieszczenia"]) {
+            TPomieszczenie nowePomieszczenie(p["nazwa_pomieszczenia"], p["temperatura"]);
+            // Dodajemy wskaźniki na doniczki do pokoju
+            for (const auto& nazwaDon : p["doniczki"]) {
+                nowePomieszczenie.dodajDoniczkePoNazwie(nazwaDon);
+            }
+            listaPomieszczen.push_back(nowePomieszczenie);
+        }
     }
     return true;
 }
 
-const TGatunek* BazaRoslin::pobierzGatunek(const std::string& nazwa) const {
-    for (const auto& g : bazaGatunkow) {
-        if (g.pobierzNazwe() == nazwa) return &g;
-    }
-    return nullptr;
-}
-
+// --- NOWY ZAPIS JSON (Zadanie 1 i 2) ---
 bool BazaRoslin::zapiszDoPliku() {
     json j;
     j["system_info"]["ostatnia_aktualizacja"] = ostatnia_aktualizacja;
 
-    for (const auto& r : lista_roslin) {
+    // 1. Zapis Gatunków
+    for (const auto& g : bazaGatunkow) {
         json temp;
-        temp["id"] = r.id;
-        temp["nazwa"] = r.nazwa;
-        temp["wilgotnosc_min"] = r.wilgotnosc_min;
-        temp["tolerancja"] = r.tolerancja;
-        temp["czas_podlewania_s"] = r.czas_podlewania_s;
-        temp["ostatnie_podlanie"] = r.ostatnie_podlanie; // <--- ZAPISUJEMY NOWE POLE
+        temp["nazwa"] = g.pobierzNazwe();
+        temp["min_wilgotnosc"] = g.pobierzMinWilgotnosc();
+        temp["temp_docelowa"] = g.pobierzTemperature();
+        j["gatunki"].push_back(temp);
+    }
 
-        j["rosliny"].push_back(temp);
+    // 2. Zapis Doniczek
+    for (const auto& d : listaDoniczek) {
+        json temp;
+        temp["nazwa_doniczki"] = d.pobierzNazweDoniczki();
+        // Jeśli wskaźnik istnieje, pobieramy nazwę, w przeciwnym razie wpisujemy Brak
+        temp["gatunek"] = d.pobierzGatunek() ? d.pobierzGatunek()->pobierzNazwe() : "Brak przypisanego gatunku";
+        temp["ostatnie_podlanie"] = d.pobierzOstatniePodlanie();
+        j["doniczki"].push_back(temp);
+    }
+
+    // 3. Zapis Pomieszczeń
+    for (const auto& p : listaPomieszczen) {
+        json temp;
+        temp["nazwa_pomieszczenia"] = p.pobierzNazwe();
+        temp["temperatura"] = p.pobierzTemperature();
+        // Wyciągamy nazwy doniczek z wskaźników
+        for (const auto& d : p.pobierzDoniczki()) {
+            if (d != nullptr) {
+                temp["doniczki"].push_back(d->pobierzNazweDoniczki());
+            }
+        }
+        j["pomieszczenia"].push_back(temp);
     }
 
     std::ofstream plik(sciezka_do_pliku);
@@ -68,46 +102,49 @@ bool BazaRoslin::zapiszDoPliku() {
     return true;
 }
 
+// --- ZADANIE 2: FUNKCJE DODAJĄCE DO BAZY ---
+void BazaRoslin::dodajGatunek(const TGatunek& nowyGatunek) {
+    bazaGatunkow.push_back(nowyGatunek);
+    zapiszDoPliku(); // Zrzut do JSON natychmiast po zmianie
+}
+
+void BazaRoslin::dodajDoniczke(const TDoniczka& nowaDoniczka) {
+    listaDoniczek.push_back(nowaDoniczka);
+    zapiszDoPliku();
+}
+
+void BazaRoslin::dodajPomieszczenie(const TPomieszczenie& nowePomieszczenie) {
+    listaPomieszczen.push_back(nowePomieszczenie);
+    zapiszDoPliku();
+}
+
+const TGatunek* BazaRoslin::pobierzGatunek(const std::string& nazwa) const {
+    for (const auto& g : bazaGatunkow) {
+        if (g.pobierzNazwe() == nazwa) return &g;
+    }
+    return nullptr;
+}
+
+
+// ==========================================================
+// STARE METODY (Zostawiamy je tymczasowo jako puste atrapy, 
+// żeby Twój stary Main.cpp z obrazka się w ogóle skompilował)
+// ==========================================================
 void BazaRoslin::wyswietlWszystkie() {
-    std::cout << "--- BAZA ROSLIN ---" << std::endl;
-    for (const auto& r : lista_roslin) {
-        std::cout << "- [" << r.id << "] " << r.nazwa << std::endl;
-    }
-    std::cout << "-------------------" << std::endl;
+    std::cout << "Przechodzimy na nowy system relacyjny. Zaktualizuj komendy w Main!" << std::endl;
 }
-
 void BazaRoslin::sprawdzRosline(const std::string& id) {
-    for (const auto& r : lista_roslin) {
-        if (r.id == id) {
-            std::cout << "Informacje o: " << r.nazwa << std::endl;
-            std::cout << "  Min. wilgotnosc: " << r.wilgotnosc_min << "% (tolerancja +-" << r.tolerancja << "%)" << std::endl;
-            std::cout << "  Czas pracy pompy: " << r.czas_podlewania_s << " s" << std::endl;
-            std::cout << "  OSTATNIE PODLANIE: " << r.ostatnie_podlanie << std::endl; // <--- WYŚWIETLAMY KIEDY
-            return;
-        }
-    }
-    std::cout << "Nie znaleziono rosliny o ID: " << id << std::endl;
+    std::cout << "Komenda info jest aktualizowana..." << std::endl;
+}
+void BazaRoslin::podlej(const std::string& id) {
+    std::cout << "Komenda podlej jest aktualizowana..." << std::endl;
 }
 
-void BazaRoslin::podlej(const std::string& id) {
-    // UWAGA: Zmieniliśmy na auto& (z referencją), żeby móc modyfikować roślinę na liście!
-    for (auto& r : lista_roslin) {
-        if (r.id == id) {
-            std::cout << ">>> URUCHAMIAM POMPKE DLA: " << r.nazwa << " <<<" << std::endl;
-
-            // Kod do pobrania aktualnego czasu komputera w Visual Studio
-            auto t = std::time(nullptr);
-            struct tm timeinfo;
-            localtime_s(&timeinfo, &t);
-            char buffer[20];
-            // Formatujemy czas do postaci RRRR-MM-DD GG:MM (np. 2026-05-13 20:30)
-            strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M", &timeinfo);
-
-            r.ostatnie_podlanie = std::string(buffer); // <--- ZAPISUJEMY NOWY CZAS DO OBIEKTU
-
-            std::cout << "Zanotowano podlewanie z data: " << r.ostatnie_podlanie << std::endl;
-            return;
+TDoniczka* TDoniczka::znajdzDoniczke(std::string nazwa) {
+    for (TDoniczka* d : rejestrDoniczek) {
+        if (d != nullptr && d->pobierzNazweDoniczki() == nazwa) {
+            return d; // Znaleziono doniczkę, zwracamy wskaźnik
         }
     }
-    std::cout << "Nie mozna podlac. Brak rosliny o ID: " << id << std::endl;
+    return nullptr; // Nic nie znaleziono
 }

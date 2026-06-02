@@ -1,56 +1,28 @@
-#include "pch.h" // Pamiętaj o tym, jeśli dalej macie prekompilowane nagłówki!
-#include <iostream>
-#include <string>
-#include "TDoniczka.h"
-#include "TPomieszczenie.h"
+#include "pch.h"
 #include "BazaRoslin.h"
-
-using namespace std;
+#include <iostream>
 
 int main() {
+    std::cout << "--- TEST ODCZYTU Z PLIKU JSON ---" << std::endl;
 
-    // 2. TWOJA CZĘŚĆ: Ładowanie bazy danych
-    BazaRoslin baza("baza.json");
-    if (!baza.wczytajZPliku()) {
-        cout << "Blad wczytywania bazy. Upewnij sie, ze plik baza.json lezy w folderze z projektem!" << endl;
-    }
-    else {
-        cout << "Wczytano baze roslin (JSON) pomyslnie!" << endl;
-    }
+    // Podpinamy się pod plik wygenerowany w poprzednim teście
+    BazaRoslin baza("baza_relacyjna.json");
 
+    if (baza.wczytajZPliku()) {
+        std::cout << "[SUKCES] Plik wczytany poprawnie!" << std::endl;
 
-    // 3. TWOJA CZĘŚĆ: Pętla komend wpisywanych przez użytkownika
-    cout << "\n--- PANEL STEROWANIA ---" << endl;
-    cout << "Dostepne komendy: lista, info <id>, podlej <id>, wyjscie\n";
-
-    string komenda;
-    string argument;
-
-    while (true) {
-        cout << "\nWpisz komende: ";
-        cin >> komenda;
-
-        if (komenda == "lista") {
-            baza.wyswietlWszystkie();
-        }
-        else if (komenda == "info") {
-            cin >> argument;
-            baza.sprawdzRosline(argument);
-        }
-        else if (komenda == "podlej") {
-            cin >> argument;
-            baza.podlej(argument);
-        }
-        else if (komenda == "wyjscie") {
-            baza.zapiszDoPliku();
-            cout << "Zamykanie programu..." << endl;
-            break;
+        // Sprawdzamy, czy wskaźniki poprawnie połączyły doniczkę z gatunkiem
+        const TGatunek* testGatunku = baza.pobierzGatunek("Kaktus");
+        if (testGatunku != nullptr) {
+            std::cout << "Znalazlem w pamieci gatunek Kaktus. Wymaga on: "
+                << testGatunku->pobierzMinWilgotnosc() << "% wilgotnosci." << std::endl;
         }
         else {
-            cout << "Nieznana komenda. Dostepne to: lista, info, podlej, wyjscie." << endl;
-            cin.clear();
-            cin.ignore(10000, '\n'); // Czyszczenie śmieci z bufora
+            std::cout << "[BLAD] Nie udalo sie odtworzyc gatunku!" << std::endl;
         }
+    }
+    else {
+        std::cout << "[BLAD] Nie moge otworzyc pliku baza_relacyjna.json!" << std::endl;
     }
 
     return 0;
