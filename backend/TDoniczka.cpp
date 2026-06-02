@@ -53,3 +53,12 @@ void TDoniczka::ZmianaTemperatury(double tempOtoczenia) {
         std::cout << "   Klimat idealny." << std::endl;
     }
 }
+
+TDoniczka* TDoniczka::znajdzDoniczke(std::string nazwa) {
+    for (TDoniczka* d : rejestrDoniczek) {
+        if (d != nullptr && d->pobierzNazweDoniczki() == nazwa) {
+            return d; // Znaleziono doniczkę, zwracamy wskaźnik
+        }
+    }
+    return nullptr; // Nic nie znaleziono
+}

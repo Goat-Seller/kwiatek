@@ -3,10 +3,10 @@
 #include <string>
 #include <vector>
 #include "TGatunek.h"
-#include "TDoniczka.h"        // NOWE
-#include "TPomieszczenie.h"   // NOWE
+#include "TDoniczka.h"
+#include "TPomieszczenie.h"
 
-// Stara struktura - ZOSTAWIAMY NA CHWILĘ, żeby nie wywaliło błędów w .cpp
+// Stara struktura
 struct Roslina {
     std::string id;
     std::string nazwa;
@@ -21,28 +21,25 @@ private:
     std::string sciezka_do_pliku;
     std::string ostatnia_aktualizacja;
 
-    // --- STARA LISTA (do usunięcia w kolejnym kroku) ---
     std::vector<Roslina> lista_roslin;
 
-    // --- NOWE RELACYJNE LISTY (Nasza nowa baza danych z zadania 1) ---
-    std::vector<TGatunek> bazaGatunkow;
-    std::vector<TDoniczka> listaDoniczek;
-    std::vector<TPomieszczenie> listaPomieszczen;
+    // --- NOWE RELACYJNE LISTY (Na wskaźnikach) ---
+    std::vector<TGatunek*> bazaGatunkow;
+    std::vector<TDoniczka*> listaDoniczek;
+    std::vector<TPomieszczenie*> listaPomieszczen;
 
 public:
-    // Konstruktor
+    TPomieszczenie* pobierzPomieszczenie(const std::string& nazwa) const;
     BazaRoslin(std::string sciezka);
+    ~BazaRoslin(); // Destruktor sprzątający pamięć
 
-    // Funkcje do odczytu i zapisu JSON
     bool wczytajZPliku();
     bool zapiszDoPliku();
 
-    // --- NOWE FUNKCJE DO DODAWANIA (Zadanie 2 z Twojego screena) ---
-    void dodajGatunek(const TGatunek& nowyGatunek);
-    void dodajDoniczke(const TDoniczka& nowaDoniczka);
-    void dodajPomieszczenie(const TPomieszczenie& nowePomieszczenie);
+    void dodajGatunek(TGatunek* nowyGatunek);
+    void dodajDoniczke(TDoniczka* nowaDoniczka);
+    void dodajPomieszczenie(TPomieszczenie* nowePomieszczenie);
 
-    // Stare funkcje (na razie zostawiamy, żeby kompilator nie krzyczał)
     void wyswietlWszystkie();
     void sprawdzRosline(const std::string& id);
     void podlej(const std::string& id);

@@ -1,42 +1,25 @@
 {
     "doniczki": [
         {
-            "gatunek": "Kaktus",
-            "nazwa_doniczki": "Kaktus_Biurko",
-            "ostatnie_podlanie": "Brak danych"
-        },
-        {
-            "gatunek": "Monstera",
-            "nazwa_doniczki": "Monstera_Salon",
+            "gatunek": "fikus",
+            "nazwa_doniczki": "fikus_tv",
             "ostatnie_podlanie": "Brak danych"
         }
     ],
     "gatunki": [
         {
-            "min_wilgotnosc": 99.0,
-            "nazwa": "Kaktus",
-            "temp_docelowa": 25.0
-        },
-        {
-            "min_wilgotnosc": 40.0,
-            "nazwa": "Monstera",
-            "temp_docelowa": 23.0
+            "min_wilgotnosc": 45.0,
+            "nazwa": "fikus",
+            "temp_docelowa": 20.0
         }
     ],
     "pomieszczenia": [
         {
             "doniczki": [
-                "Kaktus_Biurko"
+                "fikus_tv"
             ],
-            "nazwa_pomieszczenia": "Gabinet",
-            "temperatura": 22.0
-        },
-        {
-            "doniczki": [
-                "Monstera_Salon"
-            ],
-            "nazwa_pomieszczenia": "Salon",
-            "temperatura": 21.0
+            "nazwa_pomieszczenia": "salon",
+            "temperatura": 20.0
         }
     ],
     "system_info": {

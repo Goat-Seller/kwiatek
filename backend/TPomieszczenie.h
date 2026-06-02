@@ -10,7 +10,8 @@ private:
     double temperaturaPomieszczenia;
 public:
     TPomieszczenie(std::string nazwa, double tempPoczatkowa);
-
+    bool usunDoniczkePoNazwie(std::string nazwa);
+    void wyswietlZawartosc() const;
     void dodajDoniczkePoNazwie(std::string nazwa);
     void statusPomieszczenia();
     void regulujTermostat();
