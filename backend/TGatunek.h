@@ -8,7 +8,7 @@ private:
     double docelowaTemperatura;
 
 public:
-    TGatunek(std::string nazwa, double minWilg, double temp);
+    TGatunek(const std::string& nazwa, double minWilg, double temp);
 
     std::string pobierzNazwe() const { return nazwaGatunku; }
     double pobierzMinWilgotnosc() const { return minWilgotnosc; }

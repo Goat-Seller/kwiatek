@@ -8,16 +8,16 @@ private:
     std::string nazwaPomieszczenia;
     std::vector<TDoniczka*> doniczki;
     double temperaturaPomieszczenia;
-public:
-    TPomieszczenie(std::string nazwa, double tempPoczatkowa);
-    bool usunDoniczkePoNazwie(std::string nazwa);
-    void wyswietlZawartosc() const;
-    void dodajDoniczkePoNazwie(std::string nazwa);
-    void statusPomieszczenia();
-    void regulujTermostat();
 
-    // --- NOWE FUNKCJE DLA JSONA ---
-    std::string pobierzNazwe() const { return nazwaPomieszczenia; }
+public:
+    TPomieszczenie(const std::string& nazwa, double tempPoczatkowa);
+
+    bool dodajDoniczkePoNazwie(const std::string& nazwa);
+    bool usunDoniczkePoNazwie(const std::string& nazwa);
+    void wyswietlZawartosc() const;
+    void regulujTermostat(const std::vector<TPomieszczenie*>& dostepnePokoje);
+
+    const std::string& pobierzNazwe() const { return nazwaPomieszczenia; }
     double pobierzTemperature() const { return temperaturaPomieszczenia; }
     const std::vector<TDoniczka*>& pobierzDoniczki() const { return doniczki; }
 };

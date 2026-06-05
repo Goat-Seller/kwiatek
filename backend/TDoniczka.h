@@ -8,25 +8,25 @@ private:
     std::string nazwaDoniczki;
     const TGatunek* roslinka;
     double aktualnaWilgotnosc;
-
-    // NOWE POLE (inicjalizowane domyślnie, nie psuje starego kodu)
     std::string ostatnie_podlanie = "Brak danych";
 
     static std::vector<TDoniczka*> rejestrDoniczek;
+
 public:
-    TDoniczka(std::string nazwaDoniczki, const TGatunek* wzorzecGatunku);
+    TDoniczka(const std::string& nazwa, const TGatunek* wzorzecGatunku);
+    ~TDoniczka();
 
     void aktualizujWilgotnosc();
     void StatusDoniczkiX(double tempOtoczenia) const;
-    void Podlewanie();
-    void ZmianaTemperatury(double tempOtoczenia);
+    bool Podlewanie();
 
     std::string pobierzNazweDoniczki() const { return nazwaDoniczki; }
-
-    // --- NOWE FUNKCJE DLA JSONA ---
     const TGatunek* pobierzGatunek() const { return roslinka; }
     std::string pobierzOstatniePodlanie() const { return ostatnie_podlanie; }
-    void ustawOstatniePodlanie(std::string data) { ostatnie_podlanie = data; }
+    double pobierzWilgotnosc() const { return aktualnaWilgotnosc; }
 
-    static TDoniczka* znajdzDoniczke(std::string nazwa);
+    void ustawOstatniePodlanie(const std::string& data) { ostatnie_podlanie = data; }
+    void ustawWilgotnosc(double w) { aktualnaWilgotnosc = w; }
+
+    static TDoniczka* znajdzDoniczke(const std::string& nazwa);
 };
