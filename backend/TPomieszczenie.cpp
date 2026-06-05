@@ -29,7 +29,7 @@ bool TPomieszczenie::usunDoniczkePoNazwie(const std::string& nazwa) {
 }
 
 void TPomieszczenie::wyswietlZawartosc() const {
-    std::cout << "\n--- RAPORT POKOJU: " << nazwaPomieszczenia << " ---" << std::endl;
+    std::cout << "\nRAPORT POKOJU: " << nazwaPomieszczenia << " ---" << std::endl;
 
     std::cout << std::fixed << std::setprecision(1);
     std::cout << "Aktualna temperatura: " << temperaturaPomieszczenia << " st. C" << std::endl;
@@ -51,7 +51,6 @@ void TPomieszczenie::wyswietlZawartosc() const {
             }
         }
     }
-    std::cout << "---------------------------------" << std::endl;
 }
 
 void TPomieszczenie::regulujTermostat(const std::vector<TPomieszczenie*>& dostepnePokoje) {
@@ -75,7 +74,6 @@ void TPomieszczenie::regulujTermostat(const std::vector<TPomieszczenie*>& dostep
     double wyliczonaTemp = sumaTemp / liczbaRoslin;
     temperaturaPomieszczenia = std::round(wyliczonaTemp * 10.0) / 10.0;
 
-    std::cout << "\n--- ANALIZA KLIMATU DLA POKOJU: " << nazwaPomieszczenia << " ---" << std::endl;
     std::cout << std::fixed << std::setprecision(1);
     std::cout << "[TERMOSTAT] Skalibrowano i ustawiono temperature na: " << temperaturaPomieszczenia << " st. C." << std::endl;
     std::cout << std::defaultfloat;
@@ -108,8 +106,7 @@ void TPomieszczenie::regulujTermostat(const std::vector<TPomieszczenie*>& dostep
                 }
 
                 if (polecanyPokoj != "") {
-                    std::cout << "   -> SUGESTIA: Przenies doniczke do pokoju '" << polecanyPokoj
-                        << "' (warunki sa tam dla niej idealne/bezpieczne)." << std::endl;
+                    std::cout << "   -> SUGESTIA: Przenies doniczke do pokoju '" << polecanyPokoj << std::endl;
                 }
                 else {
                     std::cout << "   -> SUGESTIA: Brak odpowiedniego pokoju w systemie! Rozwaz dodanie nowego pokoju." << std::endl;
@@ -121,5 +118,4 @@ void TPomieszczenie::regulujTermostat(const std::vector<TPomieszczenie*>& dostep
     if (!znalezionoKonflikt) {
         std::cout << "Warunki sa bezpieczne dla wszystkich roslin w tym pomieszczeniu." << std::endl;
     }
-    std::cout << "---------------------------------------------------\n" << std::endl;
 }

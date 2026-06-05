@@ -11,7 +11,7 @@
 #include <random>
 
 void wyswietlMenu() {
-    std::cout << "\n=== PANEL STEROWANIA BAZA RELACYJNA ===" << std::endl;
+    std::cout << "\n=== PANEL STEROWANIA ===" << std::endl;
     std::cout << "1. dodaj_gatunek" << std::endl;
     std::cout << "2. dodaj_doniczke" << std::endl;
     std::cout << "3. usun_doniczke" << std::endl;
@@ -83,7 +83,7 @@ int main() {
         }
         else if (komenda == "usun_doniczke" || komenda == "3") {
             std::string nazwaDoniczki;
-            std::cout << "Podaj nazwe doniczki do CALKOWITEGO usuniecia z systemu: ";
+            std::cout << "Podaj nazwe doniczki do usuniecia z systemu: ";
             std::cin >> nazwaDoniczki;
 
             if (baza.usunDoniczkeZSystemu(nazwaDoniczki)) {
@@ -100,7 +100,7 @@ int main() {
 
             TDoniczka* d = TDoniczka::znajdzDoniczke(nazwaDoniczki);
             if (d != nullptr) {
-                std::cout << "\n=== STATUS DONICZKI: " << d->pobierzNazweDoniczki() << " ===" << std::endl;
+                std::cout << "\nTATUS DONICZKI: " << d->pobierzNazweDoniczki() << " ===" << std::endl;
                 std::cout << "Gatunek:             " << (d->pobierzGatunek() ? d->pobierzGatunek()->pobierzNazwe() : "Brak") << std::endl;
                 std::cout << "Ostatnie podlanie:   " << d->pobierzOstatniePodlanie() << std::endl;
 
@@ -139,7 +139,7 @@ int main() {
         }
         else if (komenda == "usun_pokoj" || komenda == "6") {
             std::string nazwaPokoju;
-            std::cout << "Podaj nazwe pokoju do CALKOWITEGO usuniecia z systemu: ";
+            std::cout << "Podaj nazwe pokoju do usuniecia z systemu: ";
             std::cin >> nazwaPokoju;
 
             if (baza.usunPomieszczenieZSystemu(nazwaPokoju)) {
@@ -186,7 +186,7 @@ int main() {
             if (p != nullptr) {
                 if (p->usunDoniczkePoNazwie(nazwaDoniczki)) {
                     baza.zapiszDoPliku();
-                    std::cout << "[SUKCES] Doniczka zniknela z pokoju i pliku!" << std::endl;
+                    std::cout << "[SUKCES] Usunięto doniczkę z pokoju!" << std::endl;
                 }
                 else {
                     std::cout << "[BLAD] W tym pokoju nie stoi taka doniczka!" << std::endl;
@@ -218,7 +218,7 @@ int main() {
             if (d != nullptr) {
                 if (d->Podlewanie()) {
                     baza.zapiszDoPliku();
-                    std::cout << "[SUKCES] Roslina podlana! Czas zanotowany, a wilgotnosc podniesiona." << std::endl;
+                    std::cout << "[SUKCES] Roslina podlana!" << std::endl;
                 }
                 else {
                     std::cout << std::fixed << std::setprecision(1);
