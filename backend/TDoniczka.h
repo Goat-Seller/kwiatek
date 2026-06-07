@@ -1,23 +1,32 @@
 #pragma once
 #include <string>
+#include <vector>
 #include "TGatunek.h"
 
 class TDoniczka {
 private:
-	std::string nazwaDoniczki;// Nazwa doniczki, np. "Doniczka 1"
-	TGatunek roslinka; // Obiekt gatunku rośliny, który jest w doniczce
-	double aktualnaWilgotnosc; // Aktualna wilgotność odczytana z czujnika (w procentach)
-	double aktualnaTemperatura; // Aktualna temperatura odczytana z czujnika (w stopniach Celsjusza)
+    std::string nazwaDoniczki;
+    const TGatunek* roslinka;
+    double aktualnaWilgotnosc;
+    std::string ostatnie_podlanie = "Brak danych";
+
+    static std::vector<TDoniczka*> rejestrDoniczek;
 
 public:
-	TDoniczka(std::string nazwaDoniczki, std::string nazwaGatunku); // Konstruktor, który inicjalizuje nazwę doniczki i gatunek rośliny
+    TDoniczka(const std::string& nazwa, const TGatunek* wzorzecGatunku);
+    ~TDoniczka();
 
-	void aktualizujWilgotnosc();// Aktualizuje aktualną wilgotność odczytaną z czujnika
-	void aktualizujTemperatura();// Aktualizuje aktualną temperaturę odczytaną z czujnika
+    void aktualizujWilgotnosc();
+    void StatusDoniczkiX(double tempOtoczenia) const;
+    bool Podlewanie();
 
-    void StatusDoniczkiX() const;
-	//static void StatusWszystkichDoniczek(const std::vector<TDoniczka>& listaDoniczek); // Statyczna metoda do wyświetlania statusu wszystkich doniczek
+    std::string pobierzNazweDoniczki() const { return nazwaDoniczki; }
+    const TGatunek* pobierzGatunek() const { return roslinka; }
+    std::string pobierzOstatniePodlanie() const { return ostatnie_podlanie; }
+    double pobierzWilgotnosc() const { return aktualnaWilgotnosc; }
 
-	void Podlewanie(); // Metoda do podlewania rośliny, która jest wywoływana, gdy wilgotność jest poniżej wymaganego minimum
-	void ZmianaTemperatury(); // Metoda do zmiany temperatury, która jest wywoływana, gdy temperatura jest inna niż docelowa temperatura wymagana przez gatunek
+    void ustawOstatniePodlanie(const std::string& data) { ostatnie_podlanie = data; }
+    void ustawWilgotnosc(double w) { aktualnaWilgotnosc = w; }
+
+    static TDoniczka* znajdzDoniczke(const std::string& nazwa);
 };

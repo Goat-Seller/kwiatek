@@ -1,0 +1,86 @@
+{
+    "doniczki": [
+        {
+            "aktualna_wilgotnosc": 85.7,
+            "gatunek": "fikus",
+            "nazwa_doniczki": "fikus_tv",
+            "ostatnie_podlanie": "2026-06-05 15:39:10"
+        },
+        {
+            "aktualna_wilgotnosc": 29.6,
+            "gatunek": "wfk",
+            "nazwa_doniczki": "Marka",
+            "ostatnie_podlanie": "Brak danych"
+        }
+    ],
+    "gatunki": [
+        {
+            "min_wilgotnosc": 45.0,
+            "nazwa": "fikus",
+            "temp_docelowa": 20.0
+        },
+        {
+            "min_wilgotnosc": 30.0,
+            "nazwa": "Kaktus",
+            "temp_docelowa": 24.0
+        },
+        {
+            "min_wilgotnosc": 34.0,
+            "nazwa": "Kaktus_3?",
+            "temp_docelowa": 54.0
+        },
+        {
+            "min_wilgotnosc": 23.0,
+            "nazwa": "Kakrusek12_54",
+            "temp_docelowa": 43.0
+        },
+        {
+            "min_wilgotnosc": 34.0,
+            "nazwa": "wfk",
+            "temp_docelowa": 43.0
+        },
+        {
+            "min_wilgotnosc": 15.0,
+            "nazwa": "asf",
+            "temp_docelowa": 54.3
+        },
+        {
+            "min_wilgotnosc": 41.0,
+            "nazwa": "sdv",
+            "temp_docelowa": 54.0
+        },
+        {
+            "min_wilgotnosc": 41.6,
+            "nazwa": "sdv",
+            "temp_docelowa": 42.0
+        }
+    ],
+    "pomieszczenia": [
+        {
+            "doniczki": [],
+            "nazwa_pomieszczenia": "salon",
+            "temperatura": 20.0
+        },
+        {
+            "doniczki": [],
+            "nazwa_pomieszczenia": "wfewe",
+            "temperatura": 43.0
+        },
+        {
+            "doniczki": [
+                "Marka",
+                "Marka"
+            ],
+            "nazwa_pomieszczenia": "pokoj1",
+            "temperatura": 43.0
+        },
+        {
+            "doniczki": [],
+            "nazwa_pomieszczenia": "sd",
+            "temperatura": 18.4
+        }
+    ],
+    "system_info": {
+        "ostatnia_aktualizacja": ""
+    }
+}
