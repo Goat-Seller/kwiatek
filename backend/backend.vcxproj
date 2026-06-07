@@ -145,6 +145,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="TDoniczka.h" />
     <ClInclude Include="TGatunek.h" />
+    <ClInclude Include="TPomieszczenie.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BazaRoslin.cpp" />
@@ -156,6 +157,7 @@
     </ClCompile>
     <ClCompile Include="TDoniczka.cpp" />
     <ClCompile Include="TGatunek.cpp" />
+    <ClCompile Include="TPomieszczenie.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

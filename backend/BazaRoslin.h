@@ -1,34 +1,38 @@
 #pragma once
-#include <iostream>
 #include <string>
 #include <vector>
-
-// Struktura przechowująca dane pojedynczej rośliny
-struct Roslina {
-    std::string id;
-    std::string nazwa;
-    int wilgotnosc_min;
-    int tolerancja;
-    int czas_podlewania_s;
-    std::string ostatnie_podlanie;
-};
+#include "TGatunek.h"
+#include "TDoniczka.h"
+#include "TPomieszczenie.h"
 
 class BazaRoslin {
 private:
-    std::vector<Roslina> lista_roslin;
     std::string sciezka_do_pliku;
     std::string ostatnia_aktualizacja;
 
-public:
-    // Konstruktor przyjmujący ścieżkę do pliku JSON
-    BazaRoslin(std::string sciezka);
+    std::vector<TGatunek*> bazaGatunkow;
+    std::vector<TDoniczka*> listaDoniczek;
+    std::vector<TPomieszczenie*> listaPomieszczen;
 
-    // Funkcje do odczytu i zapisu
+public:
+    BazaRoslin(const std::string& sciezka);
+    ~BazaRoslin();
+
     bool wczytajZPliku();
     bool zapiszDoPliku();
 
-    // Funkcje do obsługi z komend
-    void wyswietlWszystkie();
-    void sprawdzRosline(const std::string& id);
-    void podlej(const std::string& id);
+    void dodajGatunek(TGatunek* nowyGatunek);
+    void dodajDoniczke(TDoniczka* nowaDoniczka);
+    void dodajPomieszczenie(TPomieszczenie* nowePomieszczenie);
+
+    bool usunDoniczkeZSystemu(const std::string& nazwa);
+    bool usunPomieszczenieZSystemu(const std::string& nazwa);
+
+    bool czyDoniczkaPrzypisana(const std::string& nazwaDoniczki) const;
+    void wylosujWilgotnoscStartowa();
+    std::string znajdzPokojDlaDoniczki(const std::string& nazwaDoniczki) const;
+
+    TPomieszczenie* pobierzPomieszczenie(const std::string& nazwa) const;
+    const TGatunek* pobierzGatunek(const std::string& nazwa) const;
+    const std::vector<TPomieszczenie*>& pobierzPokoje() const { return listaPomieszczen; }
 };

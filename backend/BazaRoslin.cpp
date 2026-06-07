@@ -2,12 +2,16 @@
 #include "BazaRoslin.h"
 #include "json.hpp"
 #include <fstream>
-#include <ctime>   // <--- DODANA BIBLIOTEKA DO CZASU
+#include <ctime>
 
 using json = nlohmann::json;
 
-BazaRoslin::BazaRoslin(std::string sciezka) {
-    sciezka_do_pliku = sciezka;
+BazaRoslin::BazaRoslin(const std::string& sciezka) : sciezka_do_pliku(sciezka) {}
+
+BazaRoslin::~BazaRoslin() {
+    for (auto p : listaPomieszczen) delete p;
+    for (auto d : listaDoniczek) delete d;
+    for (auto g : bazaGatunkow) delete g;
 }
 
 bool BazaRoslin::wczytajZPliku() {
@@ -18,20 +22,39 @@ bool BazaRoslin::wczytajZPliku() {
     plik >> j;
     plik.close();
 
-    ostatnia_aktualizacja = j["system_info"]["ostatnia_aktualizacja"];
-    lista_roslin.clear();
+    ostatnia_aktualizacja = j.contains("system_info") ? j["system_info"].value("ostatnia_aktualizacja", "Brak") : "Brak danych";
 
-    for (const auto& r : j["rosliny"]) {
-        Roslina nowa;
-        nowa.id = r["id"];
-        nowa.nazwa = r["nazwa"];
-        nowa.wilgotnosc_min = r["wilgotnosc_min"];
-        nowa.tolerancja = r["tolerancja"];
-        nowa.czas_podlewania_s = r["czas_podlewania_s"];
-        // Używamy .value() żeby program nie wywalił błędu, jeśli roślina jeszcze nie ma tego pola w JSON
-        nowa.ostatnie_podlanie = r.value("ostatnie_podlanie", "Brak danych");
+    bazaGatunkow.clear();
+    listaDoniczek.clear();
+    listaPomieszczen.clear();
 
-        lista_roslin.push_back(nowa);
+    if (j.contains("gatunki")) {
+        for (const auto& g : j["gatunki"]) {
+            bazaGatunkow.push_back(new TGatunek(g["nazwa"], g["min_wilgotnosc"], g["temp_docelowa"]));
+        }
+    }
+
+    if (j.contains("doniczki")) {
+        for (const auto& d : j["doniczki"]) {
+            const TGatunek* wskaznikNaGatunek = pobierzGatunek(d["gatunek"]);
+            TDoniczka* nowaDoniczka = new TDoniczka(d["nazwa_doniczki"], wskaznikNaGatunek);
+            nowaDoniczka->ustawOstatniePodlanie(d.value("ostatnie_podlanie", "Brak danych"));
+            if (d.contains("aktualna_wilgotnosc")) nowaDoniczka->ustawWilgotnosc(d["aktualna_wilgotnosc"]);
+            listaDoniczek.push_back(nowaDoniczka);
+        }
+    }
+
+    if (j.contains("pomieszczenia")) {
+        for (const auto& p : j["pomieszczenia"]) {
+            TPomieszczenie* nowePomieszczenie = new TPomieszczenie(p["nazwa_pomieszczenia"], p["temperatura"]);
+
+            if (p.contains("doniczki")) {
+                for (const auto& nazwaDon : p["doniczki"]) {
+                    nowePomieszczenie->dodajDoniczkePoNazwie(nazwaDon);
+                }
+            }
+            listaPomieszczen.push_back(nowePomieszczenie);
+        }
     }
     return true;
 }
@@ -40,16 +63,33 @@ bool BazaRoslin::zapiszDoPliku() {
     json j;
     j["system_info"]["ostatnia_aktualizacja"] = ostatnia_aktualizacja;
 
-    for (const auto& r : lista_roslin) {
+    for (const auto& g : bazaGatunkow) {
         json temp;
-        temp["id"] = r.id;
-        temp["nazwa"] = r.nazwa;
-        temp["wilgotnosc_min"] = r.wilgotnosc_min;
-        temp["tolerancja"] = r.tolerancja;
-        temp["czas_podlewania_s"] = r.czas_podlewania_s;
-        temp["ostatnie_podlanie"] = r.ostatnie_podlanie; // <--- ZAPISUJEMY NOWE POLE
+        temp["nazwa"] = g->pobierzNazwe();
+        temp["min_wilgotnosc"] = g->pobierzMinWilgotnosc();
+        temp["temp_docelowa"] = g->pobierzTemperature();
+        j["gatunki"].push_back(temp);
+    }
 
-        j["rosliny"].push_back(temp);
+    for (const auto& d : listaDoniczek) {
+        json temp;
+        temp["nazwa_doniczki"] = d->pobierzNazweDoniczki();
+        temp["gatunek"] = d->pobierzGatunek() ? d->pobierzGatunek()->pobierzNazwe() : "Brak";
+        temp["ostatnie_podlanie"] = d->pobierzOstatniePodlanie();
+        temp["aktualna_wilgotnosc"] = d->pobierzWilgotnosc();
+        j["doniczki"].push_back(temp);
+    }
+
+    for (const auto& p : listaPomieszczen) {
+        json temp;
+        temp["nazwa_pomieszczenia"] = p->pobierzNazwe();
+        temp["temperatura"] = p->pobierzTemperature();
+        temp["doniczki"] = json::array();
+
+        for (const auto& d : p->pobierzDoniczki()) {
+            if (d != nullptr) temp["doniczki"].push_back(d->pobierzNazweDoniczki());
+        }
+        j["pomieszczenia"].push_back(temp);
     }
 
     std::ofstream plik(sciezka_do_pliku);
@@ -59,46 +99,96 @@ bool BazaRoslin::zapiszDoPliku() {
     return true;
 }
 
-void BazaRoslin::wyswietlWszystkie() {
-    std::cout << "--- BAZA ROSLIN ---" << std::endl;
-    for (const auto& r : lista_roslin) {
-        std::cout << "- [" << r.id << "] " << r.nazwa << std::endl;
-    }
-    std::cout << "-------------------" << std::endl;
+void BazaRoslin::dodajGatunek(TGatunek* nowyGatunek) {
+    bazaGatunkow.push_back(nowyGatunek);
+    zapiszDoPliku();
 }
 
-void BazaRoslin::sprawdzRosline(const std::string& id) {
-    for (const auto& r : lista_roslin) {
-        if (r.id == id) {
-            std::cout << "Informacje o: " << r.nazwa << std::endl;
-            std::cout << "  Min. wilgotnosc: " << r.wilgotnosc_min << "% (tolerancja +-" << r.tolerancja << "%)" << std::endl;
-            std::cout << "  Czas pracy pompy: " << r.czas_podlewania_s << " s" << std::endl;
-            std::cout << "  OSTATNIE PODLANIE: " << r.ostatnie_podlanie << std::endl; // <--- WYŚWIETLAMY KIEDY
-            return;
-        }
-    }
-    std::cout << "Nie znaleziono rosliny o ID: " << id << std::endl;
+void BazaRoslin::dodajDoniczke(TDoniczka* nowaDoniczka) {
+    listaDoniczek.push_back(nowaDoniczka);
+    zapiszDoPliku();
 }
 
-void BazaRoslin::podlej(const std::string& id) {
-    // UWAGA: Zmieniliśmy na auto& (z referencją), żeby móc modyfikować roślinę na liście!
-    for (auto& r : lista_roslin) {
-        if (r.id == id) {
-            std::cout << ">>> URUCHAMIAM POMPKE DLA: " << r.nazwa << " <<<" << std::endl;
+void BazaRoslin::dodajPomieszczenie(TPomieszczenie* nowePomieszczenie) {
+    listaPomieszczen.push_back(nowePomieszczenie);
+    zapiszDoPliku();
+}
 
-            // Kod do pobrania aktualnego czasu komputera w Visual Studio
-            auto t = std::time(nullptr);
-            struct tm timeinfo;
-            localtime_s(&timeinfo, &t);
-            char buffer[20];
-            // Formatujemy czas do postaci RRRR-MM-DD GG:MM (np. 2026-05-13 20:30)
-            strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M", &timeinfo);
+const TGatunek* BazaRoslin::pobierzGatunek(const std::string& nazwa) const {
+    for (const auto& g : bazaGatunkow) {
+        if (g->pobierzNazwe() == nazwa) return g;
+    }
+    return nullptr;
+}
 
-            r.ostatnie_podlanie = std::string(buffer); // <--- ZAPISUJEMY NOWY CZAS DO OBIEKTU
+TPomieszczenie* BazaRoslin::pobierzPomieszczenie(const std::string& nazwa) const {
+    for (auto p : listaPomieszczen) {
+        if (p->pobierzNazwe() == nazwa) return p;
+    }
+    return nullptr;
+}
 
-            std::cout << "Zanotowano podlewanie z data: " << r.ostatnie_podlanie << std::endl;
-            return;
+bool BazaRoslin::usunDoniczkeZSystemu(const std::string& nazwa) {
+    for (auto p : listaPomieszczen) {
+        if (p != nullptr) {
+            p->usunDoniczkePoNazwie(nazwa);
         }
     }
-    std::cout << "Nie mozna podlac. Brak rosliny o ID: " << id << std::endl;
+
+    for (auto it = listaDoniczek.begin(); it != listaDoniczek.end(); ++it) {
+        if (*it != nullptr && (*it)->pobierzNazweDoniczki() == nazwa) {
+            delete* it;
+            listaDoniczek.erase(it);
+            zapiszDoPliku();
+            return true;
+        }
+    }
+    return false;
+}
+
+bool BazaRoslin::usunPomieszczenieZSystemu(const std::string& nazwa) {
+    for (auto it = listaPomieszczen.begin(); it != listaPomieszczen.end(); ++it) {
+        if (*it != nullptr && (*it)->pobierzNazwe() == nazwa) {
+            delete* it;
+            listaPomieszczen.erase(it);
+            zapiszDoPliku();
+            return true;
+        }
+    }
+    return false;
+}
+
+bool BazaRoslin::czyDoniczkaPrzypisana(const std::string& nazwaDoniczki) const {
+    for (auto p : listaPomieszczen) {
+        if (p != nullptr) {
+            for (auto d : p->pobierzDoniczki()) {
+                if (d != nullptr && d->pobierzNazweDoniczki() == nazwaDoniczki) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+void BazaRoslin::wylosujWilgotnoscStartowa() {
+    for (auto d : listaDoniczek) {
+        if (d != nullptr) {
+            d->aktualizujWilgotnosc();
+        }
+    }
+    zapiszDoPliku();
+}
+
+std::string BazaRoslin::znajdzPokojDlaDoniczki(const std::string& nazwaDoniczki) const {
+    for (auto p : listaPomieszczen) {
+        if (p != nullptr) {
+            for (auto d : p->pobierzDoniczki()) {
+                if (d != nullptr && d->pobierzNazweDoniczki() == nazwaDoniczki) {
+                    return p->pobierzNazwe();
+                }
+            }
+        }
+    }
+    return "Brak";
 }
