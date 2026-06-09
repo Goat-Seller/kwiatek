@@ -27,12 +27,14 @@ public:
 
     bool usunDoniczkeZSystemu(const std::string& nazwa);
     bool usunPomieszczenieZSystemu(const std::string& nazwa);
+    bool usunGatunekZSystemu(const std::string& nazwa);
 
     bool czyDoniczkaPrzypisana(const std::string& nazwaDoniczki) const;
     void wylosujWilgotnoscStartowa();
     std::string znajdzPokojDlaDoniczki(const std::string& nazwaDoniczki) const;
 
     TPomieszczenie* pobierzPomieszczenie(const std::string& nazwa) const;
-    const TGatunek* pobierzGatunek(const std::string& nazwa) const;
+    const std::vector<TGatunek*>& pobierzGatunki() const { return bazaGatunkow; }
+    const TGatunek* getKind(const std::string& nazwa) const;
     const std::vector<TPomieszczenie*>& pobierzPokoje() const { return listaPomieszczen; }
 };

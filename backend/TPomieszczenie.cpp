@@ -8,8 +8,8 @@ TPomieszczenie::TPomieszczenie(const std::string& nazwa, double tempPoczatkowa)
     : nazwaPomieszczenia(nazwa), temperaturaPomieszczenia(tempPoczatkowa) {
 }
 
-bool TPomieszczenie::dodajDoniczkePoNazwie(const std::string& nazwa) {
-    TDoniczka* znaleziona = TDoniczka::znajdzDoniczke(nazwa);
+bool TPomieszczenie::addPotByName(const std::string& nazwa) {
+    TDoniczka* znaleziona = TDoniczka::getPot(nazwa);
 
     if (znaleziona != nullptr) {
         doniczki.push_back(znaleziona);
@@ -18,9 +18,9 @@ bool TPomieszczenie::dodajDoniczkePoNazwie(const std::string& nazwa) {
     return false;
 }
 
-bool TPomieszczenie::usunDoniczkePoNazwie(const std::string& nazwa) {
+bool TPomieszczenie::deletePotByName(const std::string& nazwa) {
     for (auto it = doniczki.begin(); it != doniczki.end(); ++it) {
-        if ((*it) != nullptr && (*it)->pobierzNazweDoniczki() == nazwa) {
+        if ((*it) != nullptr && (*it)->getPotName() == nazwa) {
             doniczki.erase(it);
             return true;
         }
@@ -28,7 +28,7 @@ bool TPomieszczenie::usunDoniczkePoNazwie(const std::string& nazwa) {
     return false;
 }
 
-void TPomieszczenie::wyswietlZawartosc() const {
+void TPomieszczenie::showContents() const {
     std::cout << "\nRAPORT POKOJU: " << nazwaPomieszczenia << " ---" << std::endl;
 
     std::cout << std::fixed << std::setprecision(1);
@@ -43,9 +43,9 @@ void TPomieszczenie::wyswietlZawartosc() const {
     else {
         for (auto d : doniczki) {
             if (d != nullptr) {
-                std::cout << "  -> " << d->pobierzNazweDoniczki();
-                if (d->pobierzGatunek()) {
-                    std::cout << " (Gatunek: " << d->pobierzGatunek()->pobierzNazwe() << ")";
+                std::cout << "  -> " << d->getPotName();
+                if (d->getKind()) {
+                    std::cout << " (Gatunek: " << d->getKind()->getName() << ")";
                 }
                 std::cout << std::endl;
             }
@@ -53,7 +53,7 @@ void TPomieszczenie::wyswietlZawartosc() const {
     }
 }
 
-void TPomieszczenie::regulujTermostat(const std::vector<TPomieszczenie*>& dostepnePokoje) {
+void TPomieszczenie::regulateTemperature(const std::vector<TPomieszczenie*>& dostepnePokoje) {
     if (doniczki.empty()) {
         std::cout << "[INFO] Pokoj " << nazwaPomieszczenia << " jest pusty. Brak akcji." << std::endl;
         return;
@@ -63,8 +63,8 @@ void TPomieszczenie::regulujTermostat(const std::vector<TPomieszczenie*>& dostep
     int liczbaRoslin = 0;
 
     for (auto d : doniczki) {
-        if (d != nullptr && d->pobierzGatunek() != nullptr) {
-            sumaTemp += d->pobierzGatunek()->pobierzTemperature();
+        if (d != nullptr && d->getKind() != nullptr) {
+            sumaTemp += d->getKind()->getTemperature();
             liczbaRoslin++;
         }
     }
@@ -82,25 +82,25 @@ void TPomieszczenie::regulujTermostat(const std::vector<TPomieszczenie*>& dostep
     double tolerancja = 5.0;
 
     for (auto d : doniczki) {
-        if (d != nullptr && d->pobierzGatunek() != nullptr) {
-            double tempDocelowa = d->pobierzGatunek()->pobierzTemperature();
+        if (d != nullptr && d->getKind() != nullptr) {
+            double tempDocelowa = d->getKind()->getTemperature();
             double uchyb = std::abs(temperaturaPomieszczenia - tempDocelowa);
 
             if (uchyb > tolerancja) {
                 znalezionoKonflikt = true;
-                std::cout << "\n[OSTRZEZENIE] Doniczka '" << d->pobierzNazweDoniczki()
+                std::cout << "\n[OSTRZEZENIE] Doniczka '" << d->getPotName()
                     << "' wymaga " << tempDocelowa << " st. C. Zle zniesie nowe warunki!" << std::endl;
 
                 std::string polecanyPokoj = "";
                 double najmniejszyUchybWInnym = tolerancja;
 
                 for (auto p : dostepnePokoje) {
-                    if (p != nullptr && p->pobierzNazwe() != nazwaPomieszczenia) {
-                        double uchybWInnym = std::abs(p->pobierzTemperature() - tempDocelowa);
+                    if (p != nullptr && p->getName() != nazwaPomieszczenia) {
+                        double uchybWInnym = std::abs(p->getTemperature() - tempDocelowa);
 
                         if (uchybWInnym <= tolerancja && uchybWInnym < najmniejszyUchybWInnym) {
                             najmniejszyUchybWInnym = uchybWInnym;
-                            polecanyPokoj = p->pobierzNazwe();
+                            polecanyPokoj = p->getName();
                         }
                     }
                 }
