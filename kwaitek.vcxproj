@@ -60,6 +60,8 @@
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <QtModules>core;gui;qml;quick</QtModules>
+    <QtInstall>6.11.0_msvc2022_64</QtInstall>
+    <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') OR !Exists('$(QtMsBuild)\Qt.props')">
@@ -151,7 +153,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="DoniczkaTile.qml" />
     <None Include="main.qml" />
+    <None Include="MainHubView.qml" />
+    <None Include="RoomDetailView.qml" />
+    <None Include="RoomTile.qml" />
+    <None Include="SpeciesManagementView.qml" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -166,6 +173,10 @@
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="qml.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="PomieszczenieWrapper.h" />
+    <QtMoc Include="SystemController.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(QtMsBuild)\qt.targets" Condition="Exists('$(QtMsBuild)\qt.targets')" />

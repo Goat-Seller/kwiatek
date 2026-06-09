@@ -16,17 +16,17 @@ public:
     TDoniczka(const std::string& nazwa, const TGatunek* wzorzecGatunku);
     ~TDoniczka();
 
-    void aktualizujWilgotnosc();
+    void setRandomHumidity();
     void StatusDoniczkiX(double tempOtoczenia) const;
     bool Podlewanie();
 
-    std::string pobierzNazweDoniczki() const { return nazwaDoniczki; }
-    const TGatunek* pobierzGatunek() const { return roslinka; }
-    std::string pobierzOstatniePodlanie() const { return ostatnie_podlanie; }
-    double pobierzWilgotnosc() const { return aktualnaWilgotnosc; }
+    const std::string& getPotName() const { return nazwaDoniczki; }
+    const std::string& getLastWatering() const { return ostatnie_podlanie; }
+    const TGatunek* getKind() const { return roslinka; }
+    double getHumidity() const { return aktualnaWilgotnosc; }
 
-    void ustawOstatniePodlanie(const std::string& data) { ostatnie_podlanie = data; }
-    void ustawWilgotnosc(double w) { aktualnaWilgotnosc = w; }
+    void setLastWatering(const std::string& data) { ostatnie_podlanie = data; }
+    void setHumidity(double w) { aktualnaWilgotnosc = w; }
 
-    static TDoniczka* znajdzDoniczke(const std::string& nazwa);
+    static TDoniczka* getPot(const std::string& nazwa);
 };

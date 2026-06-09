@@ -19,6 +19,21 @@
     <None Include="main.qml">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="RoomTile.qml">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="DoniczkaTile.qml">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="MainHubView.qml">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="RoomDetailView.qml">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="SpeciesManagementView.qml">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -27,6 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="DoniczkaWrapper.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="SystemController.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="PomieszczenieWrapper.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

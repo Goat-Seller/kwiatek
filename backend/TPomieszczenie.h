@@ -12,12 +12,12 @@ private:
 public:
     TPomieszczenie(const std::string& nazwa, double tempPoczatkowa);
 
-    bool dodajDoniczkePoNazwie(const std::string& nazwa);
-    bool usunDoniczkePoNazwie(const std::string& nazwa);
-    void wyswietlZawartosc() const;
-    void regulujTermostat(const std::vector<TPomieszczenie*>& dostepnePokoje);
+    bool addPotByName(const std::string& nazwa);
+    bool deletePotByName(const std::string& nazwa);
+    void showContents() const;
+    void regulateTemperature(const std::vector<TPomieszczenie*>& dostepnePokoje);
 
-    const std::string& pobierzNazwe() const { return nazwaPomieszczenia; }
-    double pobierzTemperature() const { return temperaturaPomieszczenia; }
-    const std::vector<TDoniczka*>& pobierzDoniczki() const { return doniczki; }
+    const std::string& getName() const { return nazwaPomieszczenia; }
+    double getTemperature() const { return temperaturaPomieszczenia; }
+    const std::vector<TDoniczka*>& getPots() const { return doniczki; }
 };

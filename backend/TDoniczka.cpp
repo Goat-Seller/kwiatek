@@ -10,7 +10,7 @@ std::vector<TDoniczka*> TDoniczka::rejestrDoniczek;
 
 TDoniczka::TDoniczka(const std::string& nazwa, const TGatunek* wzorzecGatunku)
     : nazwaDoniczki(nazwa), roslinka(wzorzecGatunku), aktualnaWilgotnosc(0.0) {
-    aktualizujWilgotnosc();
+    setRandomHumidity();
     rejestrDoniczek.push_back(this);
 }
 
@@ -23,7 +23,7 @@ TDoniczka::~TDoniczka() {
     }
 }
 
-void TDoniczka::aktualizujWilgotnosc() {
+void TDoniczka::setRandomHumidity() {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<double> rozklad(0.0, 100.0);
@@ -35,17 +35,17 @@ void TDoniczka::StatusDoniczkiX(double tempOtoczenia) const {
     if (!roslinka) return;
 
     std::cout << "\n=== STATUS DONICZKI: " << nazwaDoniczki << " ===" << std::endl;
-    std::cout << "Zasadzona roslina:    " << roslinka->pobierzNazwe() << std::endl;
+    std::cout << "Zasadzona roslina:    " << roslinka->getName() << std::endl;
 
     std::cout << std::fixed << std::setprecision(1);
     std::cout << "Aktualna wilgotnosc:  " << aktualnaWilgotnosc << " %" << std::endl;
-    std::cout << "Temperatura otoczenia: " << tempOtoczenia << " st. C (Optymalna: " << roslinka->pobierzTemperature() << " st. C)" << std::endl;
+    std::cout << "Temperatura otoczenia: " << tempOtoczenia << " st. C (Optymalna: " << roslinka->getTemperature() << " st. C)" << std::endl;
     std::cout << std::defaultfloat;
 }
 
-TDoniczka* TDoniczka::znajdzDoniczke(const std::string& nazwa) {
+TDoniczka* TDoniczka::getPot(const std::string& nazwa) {
     for (TDoniczka* d : rejestrDoniczek) {
-        if (d != nullptr && d->pobierzNazweDoniczki() == nazwa) {
+        if (d != nullptr && d->getPotName() == nazwa) {
             return d;
         }
     }
@@ -55,7 +55,7 @@ TDoniczka* TDoniczka::znajdzDoniczke(const std::string& nazwa) {
 bool TDoniczka::Podlewanie() {
     if (!roslinka) return false;
 
-    double optymalna = roslinka->pobierzMinWilgotnosc();
+    double optymalna = roslinka->getMinHumidity();
 
     if (aktualnaWilgotnosc < optymalna) {
         aktualnaWilgotnosc = optymalna;
